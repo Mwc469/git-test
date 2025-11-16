@@ -10,6 +10,7 @@ import { DriveModule } from './drive/drive.module';
 import { ContentModule } from './content/content.module';
 import { PostsModule } from './posts/posts.module';
 import { PublishingModule } from './publishing/publishing.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PublishingModule } from './publishing/publishing.module';
     ContentModule,
     PostsModule,
     PublishingModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
