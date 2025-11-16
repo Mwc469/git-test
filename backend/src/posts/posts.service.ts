@@ -37,7 +37,11 @@ export class PostsService {
       ),
     );
 
-    return this.getPost(post.id);
+    const fullPost = await this.getPost(post.id);
+    if (!fullPost) {
+      throw new Error('Failed to retrieve created post');
+    }
+    return fullPost;
   }
 
   /**

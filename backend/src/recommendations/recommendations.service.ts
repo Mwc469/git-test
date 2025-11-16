@@ -304,8 +304,13 @@ export class RecommendationsService {
     }
 
     // Calculate current frequency
+    const firstPublishedAt = posts[0].publishedAt;
+    if (!firstPublishedAt) {
+      return null;
+    }
+
     const daysSinceFirst =
-      (Date.now() - posts[0].publishedAt.getTime()) / (1000 * 60 * 60 * 24);
+      (Date.now() - firstPublishedAt.getTime()) / (1000 * 60 * 60 * 24);
     const currentFrequency = posts.length / daysSinceFirst; // posts per day
 
     let recommendation = '';
