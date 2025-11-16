@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import { api, SocialAccount } from '../../lib/api';
 import { useAuth } from '../../lib/auth-context';
+import { ThemeToggle } from '../../components/ThemeToggle';
 import { getPlatformColor, formatDateTime } from '../../lib/utils';
+import { toast } from '../../lib/toast';
 
 const platformInfo = {
   YOUTUBE: {
@@ -45,6 +47,7 @@ export default function SettingsPage() {
       setAccounts(data);
     } catch (error) {
       console.error('Failed to load accounts:', error);
+      toast.error('Failed to load accounts');
     } finally {
       setLoading(false);
     }
@@ -56,9 +59,10 @@ export default function SettingsPage() {
     try {
       await api.disconnectAccount(accountId);
       setAccounts(accounts.filter(a => a.id !== accountId));
+      toast.success('Account disconnected successfully');
     } catch (error) {
       console.error('Failed to disconnect account:', error);
-      alert('Failed to disconnect account');
+      toast.error('Failed to disconnect account');
     }
   };
 
@@ -72,35 +76,49 @@ export default function SettingsPage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage your account and connected platforms
           </p>
         </div>
 
         {/* User Profile */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Profile</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Profile</h2>
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <p className="mt-1 text-gray-900">{user?.name}</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+              <p className="mt-1 text-gray-900 dark:text-white">{user?.name}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <p className="mt-1 text-gray-900">{user?.email}</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+              <p className="mt-1 text-gray-900 dark:text-white">{user?.email}</p>
             </div>
           </div>
         </div>
 
+        {/* Appearance */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Appearance</h2>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-white">Theme</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Toggle between light and dark mode
+              </p>
+            </div>
+            <ThemeToggle />
+          </div>
+        </div>
+
         {/* Connected Accounts */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Connected Accounts</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Connected Accounts</h2>
 
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600 text-sm">Loading accounts...</p>
+              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">Loading accounts...</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -108,17 +126,17 @@ export default function SettingsPage() {
                 const account = accounts.find(a => a.platform === platform);
 
                 return (
-                  <div key={platform} className="border border-gray-200 rounded-lg p-4">
+                  <div key={platform} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-full ${getPlatformColor(platform)} flex items-center justify-center text-white text-xl font-bold`}>
                           {platform[0]}
                         </div>
                         <div>
-                          <h3 className="font-medium text-gray-900">{info.name}</h3>
-                          <p className="text-sm text-gray-600">{info.description}</p>
+                          <h3 className="font-medium text-gray-900 dark:text-white">{info.name}</h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{info.description}</p>
                           {account && (
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                               Connected as @{account.platformUsername}
                               {account.lastUsedAt && (
                                 <span> · Last used {formatDateTime(account.lastUsedAt)}</span>
@@ -131,13 +149,13 @@ export default function SettingsPage() {
                       {account ? (
                         <div className="flex items-center gap-2">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            account.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                            account.isActive ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                           }`}>
                             {account.isActive ? 'Active' : 'Inactive'}
                           </span>
                           <button
                             onClick={() => handleDisconnect(account.id)}
-                            className="px-4 py-2 bg-red-100 text-red-700 text-sm font-medium rounded-lg hover:bg-red-200 transition"
+                            className="px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 text-sm font-medium rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition"
                           >
                             Disconnect
                           </button>
@@ -159,13 +177,13 @@ export default function SettingsPage() {
         </div>
 
         {/* Google Drive */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Google Drive Integration</h2>
-          <p className="text-gray-600 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Google Drive Integration</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Connect your Google Drive to automatically import content from designated folders.
           </p>
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-900">
+          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="text-sm text-blue-900 dark:text-blue-300">
               <strong>Note:</strong> Google Drive integration is managed through the Google OAuth flow.
               Connect your YouTube account above to also enable Drive access.
             </p>
@@ -173,12 +191,12 @@ export default function SettingsPage() {
         </div>
 
         {/* Danger Zone */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-red-200">
-          <h2 className="text-xl font-bold text-red-600 mb-4">Danger Zone</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-red-200 dark:border-red-900">
+          <h2 className="text-xl font-bold text-red-600 dark:text-red-400 mb-4">Danger Zone</h2>
           <div className="space-y-4">
-            <div className="p-4 bg-red-50 rounded-lg">
-              <h3 className="font-medium text-gray-900 mb-1">Delete Account</h3>
-              <p className="text-sm text-gray-600 mb-3">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-1">Delete Account</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                 Permanently delete your account and all associated data. This action cannot be undone.
               </p>
               <button className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
@@ -189,9 +207,9 @@ export default function SettingsPage() {
         </div>
 
         {/* API Information */}
-        <div className="bg-blue-50 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">How OAuth Connections Work</h3>
-          <div className="text-sm text-gray-700 space-y-2">
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">How OAuth Connections Work</h3>
+          <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <p>
               <strong>YouTube:</strong> Connects via Google OAuth. Requires YouTube Data API and Google Drive API permissions.
             </p>
@@ -201,7 +219,7 @@ export default function SettingsPage() {
             <p>
               <strong>TikTok:</strong> Uses TikTok's Content Posting API. Requires approval from TikTok for production use.
             </p>
-            <p className="mt-4 text-xs text-gray-500">
+            <p className="mt-4 text-xs text-gray-500 dark:text-gray-500">
               All OAuth tokens are encrypted and stored securely. Your credentials are never exposed.
             </p>
           </div>
