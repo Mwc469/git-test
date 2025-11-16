@@ -1,0 +1,324 @@
+// Social Media Autopilot Platform - Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  socialAccounts    SocialAccount[]
+  driveConnections  DriveConnection[]
+  content           Content[]
+  posts             Post[]
+  postingRules      PostingRule[]
+  recommendations   Recommendation[]
+
+  @@map("users")
+}
+
+// ============================================
+// SOCIAL MEDIA ACCOUNTS
+// ============================================
+
+enum Platform {
+  YOUTUBE
+  INSTAGRAM
+  FACEBOOK
+  TIKTOK
+}
+
+model SocialAccount {
+  id                String    @id @default(uuid())
+  userId            String
+  platform          Platform
+  accountId         String    // Platform-specific account ID
+  accountName       String    // Display name
+  accessToken       String    // Encrypted OAuth token
+  refreshToken      String?   // Encrypted refresh token
+  tokenExpiry       DateTime?
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postPlatforms     PostPlatform[]
+  analytics         Analytics[]
+
+  @@unique([userId, platform, accountId])
+  @@map("social_accounts")
+}
+
+// ============================================
+// GOOGLE DRIVE INTEGRATION
+// ============================================
+
+model DriveConnection {
+  id                String    @id @default(uuid())
+  userId            String
+  folderId          String    // Google Drive folder ID
+  folderName        String
+  accessToken       String    // Encrypted OAuth token
+  refreshToken      String?   // Encrypted refresh token
+  tokenExpiry       DateTime?
+  isActive          Boolean   @default(true)
+  lastSync          DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content           Content[]
+
+  @@map("drive_connections")
+}
+
+// ============================================
+// CONTENT MANAGEMENT
+// ============================================
+
+enum ContentType {
+  VIDEO
+  IMAGE
+  CAROUSEL
+}
+
+enum ContentStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+model Content {
+  id                String         @id @default(uuid())
+  userId            String
+  driveConnectionId String
+  driveFileId       String         // Google Drive file ID
+  fileName          String
+  fileUrl           String         // Direct download URL
+  thumbnailUrl      String?
+  contentType       ContentType
+  mimeType          String
+  fileSize          BigInt         // in bytes
+  duration          Int?           // for videos, in seconds
+  width             Int?
+  height            Int?
+  status            ContentStatus  @default(PENDING)
+  metadata          Json?          // Additional metadata
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  // Relations
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  driveConnection   DriveConnection @relation(fields: [driveConnectionId], references: [id], onDelete: Cascade)
+  posts             Post[]
+
+  @@unique([driveConnectionId, driveFileId])
+  @@map("content")
+}
+
+// ============================================
+// POSTS & SCHEDULING
+// ============================================
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHING
+  PUBLISHED
+  FAILED
+  CANCELLED
+}
+
+model Post {
+  id                String       @id @default(uuid())
+  userId            String
+  contentId         String?      // Optional - can create text-only posts
+  caption           String       @db.Text
+  scheduledFor      DateTime
+  publishedAt       DateTime?
+  status            PostStatus   @default(DRAFT)
+  errorMessage      String?      @db.Text
+  retryCount        Int          @default(0)
+  maxRetries        Int          @default(3)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content           Content?     @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  platforms         PostPlatform[]
+  analytics         Analytics[]
+
+  @@index([userId, scheduledFor])
+  @@index([status, scheduledFor])
+  @@map("posts")
+}
+
+model PostPlatform {
+  id                String       @id @default(uuid())
+  postId            String
+  socialAccountId   String
+  platformPostId    String?      // ID from the platform after publishing
+  platformUrl       String?      // URL to the published post
+  status            PostStatus   @default(SCHEDULED)
+  errorMessage      String?      @db.Text
+  publishedAt       DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  post              Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  socialAccount     SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, socialAccountId])
+  @@map("post_platforms")
+}
+
+// ============================================
+// ANALYTICS & PERFORMANCE
+// ============================================
+
+model Analytics {
+  id                String       @id @default(uuid())
+  postId            String
+  socialAccountId   String
+
+  // General metrics
+  views             Int          @default(0)
+  likes             Int          @default(0)
+  comments          Int          @default(0)
+  shares            Int          @default(0)
+  saves             Int          @default(0)
+
+  // Platform-specific metrics
+  watchTime         Int?         // YouTube - in seconds
+  averageViewDuration Int?       // YouTube - in seconds
+  clickThroughRate  Float?       // YouTube - percentage
+  impressions       Int?         // Instagram, Facebook
+  reach             Int?         // Instagram, Facebook, TikTok
+  profileVisits     Int?         // Instagram, TikTok
+  completionRate    Float?       // TikTok, Instagram Reels - percentage
+  totalPlayTime     Int?         // TikTok - in seconds
+
+  // Engagement
+  engagementRate    Float?       // Calculated: (likes + comments + shares) / reach
+
+  // Follower impact
+  followersGained   Int?
+  followersLost     Int?
+
+  // Timestamps
+  fetchedAt         DateTime     @default(now())
+  periodStart       DateTime?
+  periodEnd         DateTime?
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  post              Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  socialAccount     SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, socialAccountId, fetchedAt])
+  @@index([socialAccountId, fetchedAt])
+  @@map("analytics")
+}
+
+// ============================================
+// POSTING RULES & AUTOMATION
+// ============================================
+
+model PostingRule {
+  id                String       @id @default(uuid())
+  userId            String
+  name              String
+  isActive          Boolean      @default(true)
+
+  // Content filters
+  contentTypes      ContentType[]
+  platforms         Platform[]
+
+  // Scheduling rules
+  frequency         String       // e.g., "daily", "twice-weekly", "weekly"
+  preferredTimes    Json         // Array of time slots: [{ day: "monday", hour: 14, minute: 0 }]
+  timezone          String       @default("UTC")
+
+  // Auto-posting settings
+  autoPublish       Boolean      @default(false)
+  requireApproval   Boolean      @default(true)
+
+  // AI optimization
+  useAiTiming       Boolean      @default(false) // Use AI to determine best posting time
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("posting_rules")
+}
+
+// ============================================
+// AI RECOMMENDATIONS
+// ============================================
+
+enum RecommendationType {
+  BEST_TIME
+  CONTENT_TYPE
+  CAPTION_STYLE
+  PLATFORM_FOCUS
+  POSTING_FREQUENCY
+}
+
+enum RecommendationStatus {
+  ACTIVE
+  APPLIED
+  DISMISSED
+}
+
+model Recommendation {
+  id                String               @id @default(uuid())
+  userId            String
+  type              RecommendationType
+  status            RecommendationStatus @default(ACTIVE)
+
+  title             String
+  description       String               @db.Text
+  confidence        Float                // 0-100 confidence score
+
+  // Data supporting the recommendation
+  dataPoints        Json                 // Supporting analytics data
+  suggestedAction   Json                 // Actionable steps
+
+  // Impact prediction
+  expectedImprovement Float?             // Expected % improvement
+
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  appliedAt         DateTime?
+  dismissedAt       DateTime?
+
+  // Relations
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, createdAt])
+  @@map("recommendations")
+}
