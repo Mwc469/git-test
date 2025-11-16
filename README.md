@@ -189,9 +189,14 @@ The platform uses a comprehensive PostgreSQL schema:
 
 See `backend/prisma/schema.prisma` for complete details.
 
-## API Documentation
+## Documentation
 
-Once the backend is running, visit:
+Comprehensive documentation is available:
+- **[Setup Guide](./SETUP.md)**: Step-by-step installation and configuration
+- **[API Documentation](./API_DOCUMENTATION.md)**: Complete API reference with examples
+- **[Developer Guide](./DEVELOPER_GUIDE.md)**: Architecture, patterns, and extending the platform
+
+Once the backend is running, interactive API docs are available at:
 - Swagger UI: http://localhost:3001/api/docs
 - OpenAPI JSON: http://localhost:3001/api/docs-json
 
@@ -295,13 +300,13 @@ For issues and questions:
 
 ## Roadmap
 
-- [ ] Phase 1: Core infrastructure ✅
-- [ ] Phase 2: OAuth integrations
-- [ ] Phase 3: Google Drive sync
-- [ ] Phase 4: Content management
-- [ ] Phase 5: Multi-platform publishing
-- [ ] Phase 6: Analytics collection
-- [ ] Phase 7: AI recommendation engine
-- [ ] Phase 8: Dashboard UI
-- [ ] Phase 9: Mobile app
-- [ ] Phase 10: Advanced analytics & A/B testing
+- [x] **Phase 1**: Core infrastructure ✅
+- [x] **Phase 2**: OAuth integrations (Google, Facebook, TikTok) ✅
+- [x] **Phase 3**: Google Drive sync ✅
+- [x] **Phase 4**: Content management ✅
+- [x] **Phase 5**: Multi-platform publishing ✅
+- [x] **Phase 6**: Analytics collection ✅
+- [x] **Phase 7**: AI recommendation engine ✅
+- [ ] **Phase 8**: Dashboard UI (Next.js frontend)
+- [ ] **Phase 9**: Mobile app
+- [ ] **Phase 10**: Advanced analytics & A/B testing
