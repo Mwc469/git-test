@@ -11,6 +11,7 @@ import { ContentModule } from './content/content.module';
 import { PostsModule } from './posts/posts.module';
 import { PublishingModule } from './publishing/publishing.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
     PostsModule,
     PublishingModule,
     AnalyticsModule,
+    RecommendationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
