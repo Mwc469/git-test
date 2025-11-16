@@ -151,13 +151,15 @@ Key configuration:
 
 ### OAuth Setup Guide
 
-#### Google (YouTube + Drive)
+#### Google (YouTube + Drive) ✅ CONFIGURED
 1. Go to [Google Cloud Console](https://console.cloud.google.com)
 2. Create a new project
 3. Enable APIs: YouTube Data API v3, Google Drive API
 4. Create OAuth 2.0 credentials
-5. Add authorized redirect URI: `http://localhost:3000/auth/google/callback`
-6. Copy Client ID and Secret to `.env`
+5. Add authorized redirect URI: `http://localhost:3001/api/v1/auth/google/callback`
+6. Copy Client ID and Secret to `backend/.env`
+
+**Status**: Google OAuth is configured and ready to use with account mcolvin273@gmail.com
 
 #### Facebook/Meta (Facebook + Instagram)
 1. Go to [Meta for Developers](https://developers.facebook.com)
