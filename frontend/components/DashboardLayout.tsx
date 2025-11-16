@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Logo */}
           <div className="p-6 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-gray-900">
-              Social Autopilot
+              Unmotivated Hero
             </h1>
             <p className="text-sm text-gray-500 mt-1">
               {user?.name || user?.email}
