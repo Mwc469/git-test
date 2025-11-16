@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Platform, Analytics } from '@prisma/client';
+import { Platform, Analytics, Prisma } from '@prisma/client';
 import { PostsService } from '../posts/posts.service';
 import { SocialService } from '../social/social.service';
 import { YouTubeCollector } from './collectors/youtube.collector';
@@ -8,6 +8,13 @@ import { InstagramCollector } from './collectors/instagram.collector';
 import { FacebookCollector } from './collectors/facebook.collector';
 import { TikTokCollector } from './collectors/tiktok.collector';
 import { IAnalyticsCollector } from './interfaces/collector.interface';
+
+// Type for Analytics with socialAccount relation
+type AnalyticsWithAccount = Prisma.AnalyticsGetPayload<{
+  include: {
+    socialAccount: true;
+  };
+}>;
 
 @Injectable()
 export class AnalyticsService {
@@ -170,7 +177,7 @@ export class AnalyticsService {
   /**
    * Get analytics for a post
    */
-  async getPostAnalytics(postId: string): Promise<Analytics[]> {
+  async getPostAnalytics(postId: string): Promise<AnalyticsWithAccount[]> {
     return this.prisma.analytics.findMany({
       where: { postId },
       include: {
@@ -183,7 +190,7 @@ export class AnalyticsService {
   /**
    * Get analytics for a user
    */
-  async getUserAnalytics(userId: string, limit = 100): Promise<Analytics[]> {
+  async getUserAnalytics(userId: string, limit = 100): Promise<AnalyticsWithAccount[]> {
     return this.prisma.analytics.findMany({
       where: {
         post: {

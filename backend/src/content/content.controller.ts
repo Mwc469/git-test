@@ -10,7 +10,8 @@ import {
 import { ContentService } from './content.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User, ContentType, ContentStatus } from '@prisma/client';
+import type { User } from '@prisma/client';
+import { ContentType, ContentStatus } from '@prisma/client';
 
 @Controller('content')
 @UseGuards(JwtAuthGuard)

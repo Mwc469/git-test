@@ -1,7 +1,19 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Post, PostStatus, Platform } from '@prisma/client';
+import { Post, PostStatus, Platform, Prisma } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
+
+// Type for Post with all relations
+export type PostWithRelations = Prisma.PostGetPayload<{
+  include: {
+    content: true;
+    platforms: {
+      include: {
+        socialAccount: true;
+      };
+    };
+  };
+}>;
 
 @Injectable()
 export class PostsService {
@@ -12,7 +24,7 @@ export class PostsService {
   /**
    * Create a new scheduled post
    */
-  async createPost(userId: string, dto: CreatePostDto): Promise<Post> {
+  async createPost(userId: string, dto: CreatePostDto): Promise<PostWithRelations> {
     // Create the main post
     const post = await this.prisma.post.create({
       data: {
@@ -47,7 +59,7 @@ export class PostsService {
   /**
    * Get post by ID with all relations
    */
-  async getPost(id: string): Promise<Post | null> {
+  async getPost(id: string): Promise<PostWithRelations | null> {
     return this.prisma.post.findUnique({
       where: { id },
       include: {
@@ -71,7 +83,7 @@ export class PostsService {
       limit?: number;
       offset?: number;
     },
-  ): Promise<Post[]> {
+  ): Promise<PostWithRelations[]> {
     return this.prisma.post.findMany({
       where: {
         userId,
@@ -94,7 +106,7 @@ export class PostsService {
   /**
    * Get posts scheduled for publishing
    */
-  async getScheduledPosts(): Promise<Post[]> {
+  async getScheduledPosts(): Promise<PostWithRelations[]> {
     const now = new Date();
     return this.prisma.post.findMany({
       where: {
@@ -277,7 +289,7 @@ export class PostsService {
   /**
    * Get upcoming posts (next 7 days)
    */
-  async getUpcomingPosts(userId: string): Promise<Post[]> {
+  async getUpcomingPosts(userId: string): Promise<PostWithRelations[]> {
     const now = new Date();
     const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 

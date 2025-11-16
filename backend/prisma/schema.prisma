@@ -86,6 +86,7 @@ model DriveConnection {
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   content           Content[]
 
+  @@unique([userId, folderId])
   @@map("drive_connections")
 }
 

@@ -80,7 +80,7 @@ export class ContentService {
         mimeType: driveFile.mimeType,
         fileSize: BigInt(driveFile.size || 0),
         status: ContentStatus.PROCESSED,
-        metadata: driveFile,
+        metadata: driveFile as any,
       },
     });
   }

@@ -2,7 +2,7 @@ import { Controller, Get, Delete, Param, UseGuards } from '@nestjs/common';
 import { SocialService } from './social.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 
 @Controller('social')
 @UseGuards(JwtAuthGuard)

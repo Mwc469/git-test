@@ -2,7 +2,7 @@ import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/c
 import { DriveService } from './drive.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 
 @Controller('drive')
 @UseGuards(JwtAuthGuard)

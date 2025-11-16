@@ -16,8 +16,8 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { FacebookAuthGuard } from './guards/facebook-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from '@prisma/client';
-import { Request, Response } from 'express';
+import type { User } from '@prisma/client';
+import type { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {

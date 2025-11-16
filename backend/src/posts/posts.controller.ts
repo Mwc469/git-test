@@ -14,7 +14,8 @@ import {
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User, PostStatus } from '@prisma/client';
+import type { User } from '@prisma/client';
+import { PostStatus } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 
 @Controller('posts')
