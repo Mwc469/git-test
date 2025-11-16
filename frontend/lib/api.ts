@@ -1,5 +1,5 @@
 /**
- * API Client for Social Media Autopilot Platform
+ * API Client for Unmotivated Hero
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';

@@ -1,6 +1,6 @@
 # API Documentation
 
-Complete API reference for the Social Media Autopilot Platform.
+Complete API reference for Unmotivated Hero.
 
 **Base URL**: `http://localhost:3001/api/v1`
 

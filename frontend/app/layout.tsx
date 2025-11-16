@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Social Media Autopilot",
+  title: "Unmotivated Hero",
   description: "Automate your social media presence across YouTube, Instagram, Facebook, and TikTok",
 };
 

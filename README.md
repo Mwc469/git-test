@@ -1,4 +1,4 @@
-# Social Media Autopilot Platform
+# Unmotivated Hero
 
 A comprehensive, hands-off social media management platform for bands and content creators. Connect your social accounts, link your Google Drive, set your posting rules, and let the platform handle the rest.
 

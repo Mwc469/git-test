@@ -1,6 +1,6 @@
 # Developer Guide
 
-A comprehensive guide for developers working on the Social Media Autopilot Platform.
+A comprehensive guide for developers working on Unmotivated Hero.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ A comprehensive guide for developers working on the Social Media Autopilot Platf
 
 ## Architecture Overview
 
-The Social Media Autopilot Platform follows a modular, service-oriented architecture built with NestJS.
+Unmotivated Hero follows a modular, service-oriented architecture built with NestJS.
 
 ### High-Level Architecture
 

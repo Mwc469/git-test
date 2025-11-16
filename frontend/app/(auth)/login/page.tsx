@@ -30,7 +30,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
         <div className="text-center">
           <h2 className="text-4xl font-bold text-gray-900 mb-2">
-            Social Media Autopilot
+            Unmotivated Hero
           </h2>
           <p className="text-gray-600">
             Sign in to manage your social media
