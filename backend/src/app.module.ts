@@ -6,6 +6,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { SocialModule } from './social/social.module';
+import { DriveModule } from './drive/drive.module';
+import { ContentModule } from './content/content.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -17,6 +20,9 @@ import { SocialModule } from './social/social.module';
     UsersModule,
     AuthModule,
     SocialModule,
+    DriveModule,
+    ContentModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
