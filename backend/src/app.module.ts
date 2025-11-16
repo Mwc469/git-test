@@ -9,6 +9,7 @@ import { SocialModule } from './social/social.module';
 import { DriveModule } from './drive/drive.module';
 import { ContentModule } from './content/content.module';
 import { PostsModule } from './posts/posts.module';
+import { PublishingModule } from './publishing/publishing.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PostsModule } from './posts/posts.module';
     DriveModule,
     ContentModule,
     PostsModule,
+    PublishingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
