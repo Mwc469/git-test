@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-icons": "node scripts/generate-icons.js",
+    "pwa:test": "npx serve -s out -l 3000"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
