@@ -1,6 +1,6 @@
-# Social Media Autopilot - Setup Guide
+# Unmotivated Hero - Setup Guide
 
-This guide will walk you through setting up the Social Media Autopilot platform from scratch.
+This guide will walk you through setting up Unmotivated Hero from scratch.
 
 ## Prerequisites
 

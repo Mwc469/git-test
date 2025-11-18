@@ -1,4 +1,4 @@
-// Social Media Autopilot Platform - Database Schema
+// Unmotivated Hero - Database Schema
 
 generator client {
   provider = "prisma-client-js"
@@ -86,6 +86,7 @@ model DriveConnection {
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   content           Content[]
 
+  @@unique([userId, folderId])
   @@map("drive_connections")
 }
 
