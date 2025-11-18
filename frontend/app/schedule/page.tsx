@@ -129,7 +129,7 @@ export default function SchedulePage() {
                         >
                           <span className={`w-2 h-2 rounded-full ${getPlatformColor(platform.platform)}`}></span>
                           <span className="font-medium">{platform.platform}</span>
-                          <span className="text-gray-500">@{platform.socialAccount.platformUsername}</span>
+                          <span className="text-gray-500">{platform.socialAccount.accountName}</span>
                           {platform.platformUrl && (
                             <a
                               href={platform.platformUrl}
@@ -320,7 +320,7 @@ function CreatePostModal({ onClose, onSuccess }: { onClose: () => void; onSucces
                     className="w-4 h-4 text-blue-600 rounded"
                   />
                   <span className="font-medium">{account.platform}</span>
-                  <span className="text-gray-500 text-sm">@{account.platformUsername}</span>
+                  <span className="text-gray-500 text-sm">{account.accountName}</span>
                 </label>
               ))}
             </div>

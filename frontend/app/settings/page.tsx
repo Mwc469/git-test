@@ -137,10 +137,8 @@ export default function SettingsPage() {
                           <p className="text-sm text-gray-600 dark:text-gray-400">{info.description}</p>
                           {account && (
                             <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                              Connected as @{account.platformUsername}
-                              {account.lastUsedAt && (
-                                <span> · Last used {formatDateTime(account.lastUsedAt)}</span>
-                              )}
+                              Connected as {account.accountName}
+                              <span> · Connected {formatDateTime(account.createdAt)}</span>
                             </p>
                           )}
                         </div>

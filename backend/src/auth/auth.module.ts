@@ -8,10 +8,14 @@ import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
+import { TikTokStrategy } from './strategies/tiktok.strategy';
+
+import { SocialModule } from '../social/social.module';
 
 @Module({
   imports: [
     UsersModule,
+    SocialModule,
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -28,6 +32,7 @@ import { FacebookStrategy } from './strategies/facebook.strategy';
     JwtStrategy,
     GoogleStrategy,
     FacebookStrategy,
+    TikTokStrategy,
   ],
   controllers: [AuthController],
   exports: [AuthService],

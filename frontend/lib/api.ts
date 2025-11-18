@@ -19,11 +19,11 @@ export interface User {
 export interface SocialAccount {
   id: string;
   platform: 'YOUTUBE' | 'INSTAGRAM' | 'FACEBOOK' | 'TIKTOK';
-  platformUserId: string;
-  platformUsername: string;
+  accountId: string;
+  accountName: string;
   isActive: boolean;
-  connectedAt: string;
-  lastUsedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Content {
@@ -56,7 +56,7 @@ export interface PostPlatform {
   platformPostId?: string;
   platformUrl?: string;
   socialAccount: {
-    platformUsername: string;
+    accountName: string;
   };
 }
 
@@ -155,6 +155,13 @@ class ApiClient {
     }
 
     return response.json();
+  }
+
+  async post<T>(endpoint: string, data: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
   // Auth endpoints

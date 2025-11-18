@@ -15,13 +15,19 @@ import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { FacebookAuthGuard } from './guards/facebook-auth.guard';
+import { TikTokAuthGuard } from './guards/tiktok-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { SocialService } from '../social/social.service';
+import { Platform } from '@prisma/client';
 import type { User } from '@prisma/client';
 import type { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private socialService: SocialService,
+  ) {}
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
@@ -56,10 +62,24 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
-    // Handle Google OAuth callback
-    // This will be implemented in the social accounts module
-    const user = req.user;
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?provider=google&data=${JSON.stringify(user)}`);
+    try {
+      const oauthData: any = req.user;
+
+      // For now, redirect to frontend with OAuth data
+      // Frontend will need to be logged in first to associate the account
+      const params = new URLSearchParams({
+        provider: 'google',
+        platform: 'YOUTUBE',
+        accountId: oauthData.googleId,
+        accountName: oauthData.name || oauthData.email,
+        accessToken: oauthData.accessToken,
+        refreshToken: oauthData.refreshToken || '',
+      });
+
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params.toString()}`);
+    } catch (error) {
+      res.redirect(`${process.env.FRONTEND_URL}/connect?error=google_auth_failed`);
+    }
   }
 
   // Facebook OAuth routes
@@ -72,9 +92,49 @@ export class AuthController {
   @Get('facebook/callback')
   @UseGuards(FacebookAuthGuard)
   async facebookAuthCallback(@Req() req: Request, @Res() res: Response) {
-    // Handle Facebook OAuth callback
-    // This will be implemented in the social accounts module
-    const user = req.user;
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?provider=facebook&data=${JSON.stringify(user)}`);
+    try {
+      const oauthData: any = req.user;
+
+      const params = new URLSearchParams({
+        provider: 'facebook',
+        platform: 'FACEBOOK',
+        accountId: oauthData.facebookId,
+        accountName: oauthData.name || oauthData.email || 'Facebook User',
+        accessToken: oauthData.accessToken,
+        refreshToken: oauthData.refreshToken || '',
+      });
+
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params.toString()}`);
+    } catch (error) {
+      res.redirect(`${process.env.FRONTEND_URL}/connect?error=facebook_auth_failed`);
+    }
+  }
+
+  // TikTok OAuth routes
+  @Get('tiktok')
+  @UseGuards(TikTokAuthGuard)
+  async tiktokAuth() {
+    // Guard redirects to TikTok
+  }
+
+  @Get('tiktok/callback')
+  @UseGuards(TikTokAuthGuard)
+  async tiktokAuthCallback(@Req() req: Request, @Res() res: Response) {
+    try {
+      const oauthData: any = req.user;
+
+      const params = new URLSearchParams({
+        provider: 'tiktok',
+        platform: 'TIKTOK',
+        accountId: oauthData.tiktokId,
+        accountName: oauthData.name || 'TikTok User',
+        accessToken: oauthData.accessToken,
+        refreshToken: oauthData.refreshToken || '',
+      });
+
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params.toString()}`);
+    } catch (error) {
+      res.redirect(`${process.env.FRONTEND_URL}/connect?error=tiktok_auth_failed`);
+    }
   }
 }

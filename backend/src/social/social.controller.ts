@@ -1,5 +1,5 @@
-import { Controller, Get, Delete, Param, UseGuards } from '@nestjs/common';
-import { SocialService } from './social.service';
+import { Controller, Get, Delete, Param, UseGuards, Post, Body } from '@nestjs/common';
+import { SocialService, ConnectSocialAccountDto } from './social.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { User } from '@prisma/client';
@@ -12,6 +12,17 @@ export class SocialController {
   @Get('accounts')
   async getMyAccounts(@CurrentUser() user: User) {
     return this.socialService.getUserAccounts(user.id);
+  }
+
+  @Post('connect')
+  async connectAccount(
+    @CurrentUser() user: User,
+    @Body() dto: Omit<ConnectSocialAccountDto, 'userId'>,
+  ) {
+    return this.socialService.connectAccount({
+      ...dto,
+      userId: user.id,
+    });
   }
 
   @Get('accounts/:id')

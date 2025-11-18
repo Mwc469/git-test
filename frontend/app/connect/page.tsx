@@ -3,16 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { api } from '../../lib/api';
-
-interface ConnectedAccount {
-  id: string;
-  platform: 'YOUTUBE' | 'INSTAGRAM' | 'FACEBOOK' | 'TIKTOK';
-  platformUserId: string;
-  platformUsername: string;
-  isActive: boolean;
-  connectedAt: string;
-}
+import { api, SocialAccount } from '../../lib/api';
 
 const platforms = [
   {
@@ -55,7 +46,7 @@ const platforms = [
 
 export default function ConnectAccountsPage() {
   const router = useRouter();
-  const [connectedAccounts, setConnectedAccounts] = useState<ConnectedAccount[]>([]);
+  const [connectedAccounts, setConnectedAccounts] = useState<SocialAccount[]>([]);
   const [loading, setLoading] = useState(true);
   const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
 
@@ -201,13 +192,13 @@ export default function ConnectAccountsPage() {
                               Connected as
                             </p>
                             <p className="font-semibold text-gray-900 dark:text-white text-lg">
-                              @{account.platformUsername}
+                              {account.accountName}
                             </p>
                           </div>
                           <div className="text-green-500 text-2xl">✓</div>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Connected on {new Date(account.connectedAt).toLocaleDateString()}
+                          Connected on {new Date(account.createdAt).toLocaleDateString()}
                         </p>
                       </div>
 
