@@ -54,6 +54,63 @@ export default function DashboardPage() {
           <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your social media.</p>
         </div>
 
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link
+            href="/connect"
+            className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all hover:scale-105"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="text-4xl mb-3">🔗</div>
+                <h3 className="text-xl font-bold mb-2">Connect Accounts</h3>
+                <p className="text-blue-100 text-sm">
+                  Link your social media accounts to start automating your posts
+                </p>
+              </div>
+              <svg className="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </Link>
+
+          <Link
+            href="/schedule"
+            className="bg-white rounded-xl shadow-sm p-6 border-2 border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="text-4xl mb-3">📅</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Schedule Post</h3>
+                <p className="text-gray-600 text-sm">
+                  Create and schedule your next social media post
+                </p>
+              </div>
+              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </Link>
+
+          <Link
+            href="/content"
+            className="bg-white rounded-xl shadow-sm p-6 border-2 border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="text-4xl mb-3">📁</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Manage Content</h3>
+                <p className="text-gray-600 text-sm">
+                  Upload and organize your media files
+                </p>
+              </div>
+              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </Link>
+        </div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard

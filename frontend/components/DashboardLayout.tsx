@@ -8,6 +8,7 @@ import MobileMenu from './MobileMenu';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '📊' },
+  { name: 'Connect Accounts', href: '/connect', icon: '🔗' },
   { name: 'Content', href: '/content', icon: '📁' },
   { name: 'Schedule', href: '/schedule', icon: '📅' },
   { name: 'Analytics', href: '/analytics', icon: '📈' },
