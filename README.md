@@ -2,6 +2,14 @@
 
 A comprehensive, hands-off social media management platform for bands and content creators. Connect your social accounts, link your Google Drive, set your posting rules, and let the platform handle the rest.
 
+## 🚀 Quick Deploy
+
+Deploy the PWA to Vercel in one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Mwc469/git-test&project-name=unmotivated-hero&repository-name=unmotivated-hero&root-directory=frontend)
+
+**Get a live link in 3 minutes!** Perfect for testing on iPad/mobile. [See deployment guide →](./VERCEL_DEPLOY.md)
+
 ## Features
 
 ### Core Capabilities
