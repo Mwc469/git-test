@@ -174,7 +174,7 @@ class ApiClient {
 
   // User endpoints
   async getCurrentUser(): Promise<User> {
-    return this.request<User>('/users/me');
+    return this.request<User>('/auth/me');
   }
 
   // Social accounts endpoints
